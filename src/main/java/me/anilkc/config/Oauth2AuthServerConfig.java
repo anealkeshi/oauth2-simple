@@ -1,7 +1,10 @@
 package me.anilkc.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -13,6 +16,9 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @EnableAuthorizationServer
 public class Oauth2AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
+  @Autowired
+  @Qualifier("authenticationManagerBean")
+  private AuthenticationManager auth;
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -22,24 +28,25 @@ public class Oauth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
              .secret("secreta")
              .scopes("READ")
              .autoApprove(true)
-             .accessTokenValiditySeconds(600)
+             .accessTokenValiditySeconds(10)
              .refreshTokenValiditySeconds(600)
-             .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code")
+             .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code", "client_credentials")
              .and()
              .withClient("clientB")
              .secret("secretb")
              .scopes("WRITE")
              .autoApprove(true)
-             .accessTokenValiditySeconds(600)
+             .accessTokenValiditySeconds(10)
              .refreshTokenValiditySeconds(600)
-             .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code");
+             .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code", "client_credentials");
     // @formatter:on
   }
 
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
     // @formatter:off
-    endpoints.tokenStore(tokenStore());
+    endpoints.tokenStore(tokenStore())
+             .authenticationManager(auth);
     // @formatter:on
   }
 

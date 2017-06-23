@@ -5,8 +5,16 @@ spring:
   application:
     name: auth-service
     
+#logging:
+#  level:
+#     org:
+#       springframework:
+#         security: DEBUG
+
 logging:
   level:
      org:
        springframework:
-         security: DEBUG
+         security:
+          web:
+            FilterChainProxy: DEBUG
