@@ -28,7 +28,7 @@ public class Oauth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
              .secret("secreta")
              .scopes("READ")
              .autoApprove(true)
-             .accessTokenValiditySeconds(10)
+             .accessTokenValiditySeconds(600)
              .refreshTokenValiditySeconds(600)
              .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code", "client_credentials")
              .and()
@@ -36,7 +36,7 @@ public class Oauth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
              .secret("secretb")
              .scopes("WRITE")
              .autoApprove(true)
-             .accessTokenValiditySeconds(10)
+             .accessTokenValiditySeconds(600)
              .refreshTokenValiditySeconds(600)
              .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code", "client_credentials");
     // @formatter:on
